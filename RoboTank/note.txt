@@ -1,0 +1,6 @@
+if upload program to Arduino failed with a synch error, then check if the correct serial port is selected : Tools -> Serial Port
+
+If input command in the serial prompt and get no reponse, check:
+1. jumpers on the motor shield should be PWRIN, instead of VIN
+2. check baud rate of the serial monitor, which should be 9600
+

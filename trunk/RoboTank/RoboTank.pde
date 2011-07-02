@@ -57,7 +57,7 @@ void loop() {
     command = '\0'; //reset command
     break;    
     case 'f': //right
-    Serial.println("right!!\r\n");     
+    Serial.println("Right!!\r\n");     
     digitalWrite(M1,HIGH); 
     digitalWrite(M2, HIGH);          
     analogWrite(E1, 255);   //PWM speed control
@@ -65,6 +65,7 @@ void loop() {
     command = '\0'; //reset command
     break;           
     case 'd': //stop
+    Serial.println("Stop!\r\n"); 
     analogWrite(E1, 0);   //PWM speed control
     analogWrite(E2, 0);   //PWM speed control 
     command = '\0'; //reset command

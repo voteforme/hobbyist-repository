@@ -1,9 +1,10 @@
 /*
   This example code control the RoboTank using serial interface from the computer.
   Commands are given to RoboTank using the serial monitor in the Arduino IDE
-  On the motor controller, moving the jumper to PWRIN to supply power to the Arduino through the 6-battery pack.
+  Motor direction may be wrong depending the polarity of the DC motor connection.
  */
 
+ 
 int E1 = 5;
 int M1 = 4;
 int E2 = 6;

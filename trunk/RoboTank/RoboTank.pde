@@ -19,11 +19,12 @@ void setup() {
      pinMode(13, OUTPUT);      
     
     digitalWrite(M1,LOW); 
-    digitalWrite(M2, HIGH);       
+    digitalWrite(M2, HIGH);                
 }
 
 void loop() {
   
+  char *help_menu = "\'e\' go forward\n\'d\' stop\n\'s\' left\n\'f\' right\n\'c\' go backward\n";       
   
   if (Serial.available()>0)
   {
@@ -69,9 +70,13 @@ void loop() {
     analogWrite(E1, 0);   //PWM speed control
     analogWrite(E2, 0);   //PWM speed control 
     command = '\0'; //reset command
-    break;    
+    break;        
     case '\0':
     //do nothing
+    break;    
+    default:
+    Serial.println(help_menu);
+    command = '\0'; //reset command
     break; 
   }
  

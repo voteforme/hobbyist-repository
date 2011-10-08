@@ -53,19 +53,19 @@ void loop() {
     break;   
     case 's': //left
     Serial.println("Left!!\r\n");         
-    analogWrite(OUT1, 0);   
-    analogWrite(OUT2, pwm_speed);   //PWM speed control    
-    analogWrite(OUT3, 0);   //PWM speed control
-    analogWrite(OUT4, pwm_speed);           
+    analogWrite(OUT1, pwm_speed);   
+    analogWrite(OUT2, 0);   //PWM speed control    
+    analogWrite(OUT3, pwm_speed);   //PWM speed control
+    analogWrite(OUT4, 0);          
     last_command = command;    
     command = '\0'; //reset command
     break;    
     case 'f': //right
     Serial.println("Right!!\r\n"); 
-    analogWrite(OUT1, pwm_speed);   
-    analogWrite(OUT2, 0);   //PWM speed control    
-    analogWrite(OUT3, pwm_speed);   //PWM speed control
-    analogWrite(OUT4, 0);  
+    analogWrite(OUT1, 0);   
+    analogWrite(OUT2, pwm_speed);   //PWM speed control    
+    analogWrite(OUT3, 0);   //PWM speed control
+    analogWrite(OUT4, pwm_speed);       
     last_command = command;    
     command = '\0'; //reset command
     break;           

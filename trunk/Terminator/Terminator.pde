@@ -10,7 +10,7 @@ int OUT2 = 5;
 int OUT3 = 6;
 int OUT4 = 7;
 char command = '\0';
-int pwm_speed = 200; //from 0 - 255
+int pwm_speed = 255; //from 0 - 255
 char last_command; //remember the last command for speed adjustment
 void setup() {                
   // initialize the digital pin as an output.

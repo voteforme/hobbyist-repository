@@ -9,10 +9,9 @@
  ** CLK - pin 13
  ** CS - pin 10
  
- created   Nov 2010
- by David A. Mellis
- modified 9 Apr 2012
- by Tom Igoe
+ created   03 2013
+ by Hobbyist
+ modified 24 Mar 2013
  
  This example code is in the public domain.
  	 

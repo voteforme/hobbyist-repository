@@ -35,13 +35,18 @@ void setup()
   // Note that even if it's not used as the CS pin, the hardware SS pin 
   // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
   // or the SD library functions will not work. 
-   pinMode(10, OUTPUT);
-   
-  if (!SD.begin(10)) {
+   //pinMode(9, OUTPUT);
+
+   SD.begin(2);
+   pinMode(2, OUTPUT);
+   digitalWrite(10, LOW);
+   /*
+  if (!SD.begin(8)) {
     Serial.println("initialization failed!");
     return;
   }
   Serial.println("initialization done.");
+  */
   
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
@@ -50,7 +55,7 @@ void setup()
   // if the file opened okay, write to it:
   if (myFile) {
     Serial.print("Writing to test.txt...");
-    myFile.println("testing 1, 2, 3.");
+    myFile.println("testing 1, 2, 3, 4, 5.");
 	// close the file:
     myFile.close();
     Serial.println("done.");

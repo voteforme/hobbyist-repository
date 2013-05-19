@@ -21,6 +21,12 @@
 
 File myFile;
 
+// On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+// Note that even if it's not used as the CS pin, the hardware SS pin 
+// (10 on most Arduino boards, 53 on the Mega) must be left as an output 
+// or the SD library functions will not work. 
+int ChipSelect = 10;
+
 void setup()
 {
  // Open serial communications and wait for port to open:
@@ -31,22 +37,20 @@ void setup()
 
 
   Serial.print("Initializing SD card...");
-  // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
-  // Note that even if it's not used as the CS pin, the hardware SS pin 
-  // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
-  // or the SD library functions will not work. 
-   //pinMode(9, OUTPUT);
 
-   SD.begin(2);
-   pinMode(2, OUTPUT);
-   digitalWrite(10, LOW);
-   /*
-  if (!SD.begin(8)) {
+
+   pinMode(ChipSelect, OUTPUT);
+   
+  if (!SD.begin(ChipSelect)) {
     Serial.println("initialization failed!");
+    Serial.println("Things to check:");
+    Serial.println("* Is a card inserted?");
+    Serial.println("* Is the card formated to FAT32 or FAT16?");
+    Serial.println("* Is your wiring correct?");
+    Serial.println("* Did you change the chipSelect pin to match your shield or module?");    
     return;
   }
-  Serial.println("initialization done.");
-  */
+  Serial.println("initialization done.");  
   
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.

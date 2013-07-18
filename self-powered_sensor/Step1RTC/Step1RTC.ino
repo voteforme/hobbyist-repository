@@ -135,6 +135,13 @@ void loop () {
     Serial.print(temp_ext_value);       
     Serial.println(" DegreeC");  
     
+    //send to C# app in this formate <temp1;temp>, e.g. <19.21;16.50>
+    Serial.print("<");
+    Serial.print(temp_int_value);
+    Serial.print(";");
+    Serial.print(temp_ext_value);
+    Serial.println(">");
+    
         textline = now.year() + date_delimiter + now.month() + date_delimiter + now.day() + value_delimiter
              + now.hour() + time_delimiter + now.minute() + time_delimiter + now.second() + value_delimiter;                
     Serial.print(textline);    

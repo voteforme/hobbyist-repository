@@ -6,8 +6,9 @@
 #include <SD.h>
 
 #define SERIAL_DEBUG 
+
 #define ON true
-#define OFF false
+#define OFF 0false
 
 #define RTC_VCC_PIN 18
 #define TEMP_INT_PIN 19
@@ -28,6 +29,7 @@ String textline;
 String date_delimiter = "/";
 String time_delimiter = ":";
 String value_delimiter = ",";
+
 File LogFile;
 
 void init_io()
@@ -111,23 +113,19 @@ float readValidTemp(OneWire temp_sensor)
 }  
 
 void setup () {
-
     init_io();
     //supply power to the peripherals
     Switch_Peripherals(ON);
-    #ifdef SERIAL_DEBUG
-    Serial.begin(115200);
-    #endif
+    Serial.begin(115400);
+    //enable serial for Bluetooth
+    Serial2.begin(9600);
     Wire.begin();
-    RTC.begin(); 
-  if (! RTC.isrunning()) {
-    #ifdef SERIAL_DEBUG
+    RTC.begin();
+  //if (! RTC.isrunning()) {
     Serial.println("RTC is NOT running!");
-    #endif
-    // diffollowing line sets the RTC to the date & time this sketch was compiled
+    // following line sets the RTC to the date & time this sketch was compiled
     RTC.adjust(DateTime(__DATE__, __TIME__));
-  }    
-   
+  //}    
   if (!SD.begin(CHIP_SELECT_PIN)) {
     #ifdef SERIAL_DEBUG
     Serial.println("* Initialization failed!");
@@ -142,36 +140,43 @@ void setup () {
   #ifdef SERIAL_DEBUG
   Serial.println("initialization done.");  
   #endif
+  
 }
 
 void loop () {
-  Switch_Peripherals(ON);
     DateTime now = RTC.now();
     
     textline = now.year() + date_delimiter + now.month() + date_delimiter + now.day() + value_delimiter
              + now.hour() + time_delimiter + now.minute() + time_delimiter + now.second() + value_delimiter;                
              
-    float temp_int_value = readValidTemp(temp_int);
-    float temp_ext_value = readValidTemp(temp_ext);    
-    textline = now.year() + date_delimiter + now.month() + date_delimiter + now.day() + value_delimiter
-             + now.hour() + time_delimiter + now.minute() + time_delimiter + now.second() + value_delimiter;                
+    //if the date time from the RTC is not valid, then skip the measurement
+    if ( now.month()>12)
+    {
+      return; //Arduino doesn't allow to use 'continue'
+    }
              
-    #ifdef SERIAL_DEBUG             
     Serial.println("Temperature Reading: ");
-   
+    float temp_int_value = readValidTemp(temp_int);
     Serial.print(temp_int_value);       
     Serial.println(" DegreeC");
-   
+    float temp_ext_value = readValidTemp(temp_ext);
     Serial.print(temp_ext_value);       
     Serial.println(" DegreeC");  
     
+    Serial.println("Send to PC");
+    //send to C# app via Bluetooth in this formate <temp1;temp>, e.g. <19.21;16.50>
+    Serial2.print("<");
+    Serial2.print(temp_int_value);
+    Serial2.print(";");
+    Serial2.print(temp_ext_value);
+    Serial2.println(">");
+    
+        textline = now.year() + date_delimiter + now.month() + date_delimiter + now.day() + value_delimiter
+             + now.hour() + time_delimiter + now.minute() + time_delimiter + now.second() + value_delimiter;                             
     Serial.print(textline);    
     Serial.println();  
-    #endif            
-    //SD.begin(CHIP_SELECT_PIN);
-    SD.begin(CHIP_SELECT_PIN);
-    
-    LogFile = SD.open("LogFile2.txt", FILE_WRITE);  
+
+    LogFile = SD.open("LogFile.txt", FILE_WRITE);  
     if (LogFile)
     {
       
@@ -180,7 +185,7 @@ void loop () {
       LogFile.print(value_delimiter);
       LogFile.print(temp_ext_value);
       LogFile.println();
-      //LogFile.println("a,b,c,d");
+      
       LogFile.close();
       #ifdef SERIAL_DEBUG 
       Serial.println("Write done.");     
@@ -193,29 +198,6 @@ void loop () {
       #endif
     }
     
-  // re-open the file for reading:
-  LogFile = SD.open("LogFile2.txt");
-  #ifdef SERIAL_DEBUG
-  if (LogFile) {    
-    Serial.println("LogFile2.txt:");  
+    delay(5000);
     
-    // read from the file until there's nothing else in it:
-    while (LogFile.available()) {        
-    	Serial.write(LogFile.read());
-    }
-    // close the file:
-    LogFile.close();
-  } else {
-  	// if the file didn't open, print an error:
-    Serial.println("error can't read file");
-  }    
-  #endif
-  Switch_Peripherals(OFF);
-  delay(3000);
-  /*
-  delay(300000);//5minutes
-  delay(300000);//5minutes
-  delay(300000);//5minutes
-  delay(300000);//5minutes  
-  */
 }

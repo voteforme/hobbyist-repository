@@ -10,11 +10,9 @@
 #define ON true
 #define OFF 0false
 
-#define RTC_VCC_PIN 18
 #define TEMP_INT_PIN 19
 
-#define TEMP_EXT_VCC_PIN 45
-#define TEMP_EXT_PIN 44
+#define TEMP_EXT_PIN 7
 
 #define CHIP_SELECT_PIN 53 //for mega 
 
@@ -34,23 +32,7 @@ File LogFile;
 
 void init_io()
 {
-  pinMode(RTC_VCC_PIN, OUTPUT);   
-  pinMode(TEMP_EXT_VCC_PIN, OUTPUT);   
   pinMode(CHIP_SELECT_PIN, OUTPUT);   
-}
-void Switch_Peripherals(bool on_off)
-{
-  if (on_off == ON)
-  {
-    //switch on the sensor on the real time clock
-    digitalWrite(RTC_VCC_PIN, HIGH); 
-    digitalWrite(TEMP_EXT_VCC_PIN, HIGH); 
-  }
-  else
-  {
-    digitalWrite(RTC_VCC_PIN, LOW); 
-    digitalWrite(TEMP_EXT_VCC_PIN, LOW);     
-  }
 }
 
 float getTemp(OneWire temp_sensor){
@@ -114,9 +96,7 @@ float readValidTemp(OneWire temp_sensor)
 
 void setup () {
     init_io();
-    //supply power to the peripherals
-    Switch_Peripherals(ON);
-    Serial.begin(115400);
+    Serial.begin(57600);
     //enable serial for Bluetooth
     Serial2.begin(9600);
     Wire.begin();

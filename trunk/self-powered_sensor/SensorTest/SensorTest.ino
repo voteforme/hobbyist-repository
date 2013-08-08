@@ -24,23 +24,6 @@ String date_delimiter = "/";
 String time_delimiter = ":";
 String value_delimiter = ",";
 
-void init_io()
-{
-  pinMode(TEMP_EXT_VCC_PIN, OUTPUT);     
-}
-void Switch_Peripherals(bool on_off)
-{
-  if (on_off == ON)
-  {
-    //switch on the sensor 
-    digitalWrite(TEMP_EXT_VCC_PIN, HIGH); 
-  }
-  else
-  {
-    digitalWrite(TEMP_EXT_VCC_PIN, LOW);     
-  }
-}
-
 float getTemp(OneWire temp_sensor){
   //returns the temperature from one DS18S20 in DEG Celsius
 
@@ -101,11 +84,7 @@ float readValidTemp(OneWire temp_sensor)
 }  
 
 void setup () {
-
-    init_io();
-    //supply power to the peripherals
-    //Switch_Peripherals(ON);
-    //delay(5000);
+  
     Serial.begin(57600);
 
     Wire.begin();  

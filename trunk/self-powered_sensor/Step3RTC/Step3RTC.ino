@@ -11,10 +11,11 @@
 #define OFF 0false
 
 #define TEMP_INT_PIN 19
-
 #define TEMP_EXT_PIN 7
-
 #define CHIP_SELECT_PIN 53 //for mega 
+
+#define MIN_TEMP -10
+#define MAX_TEMP 100
 
 RTC_DS1307 RTC;
 OneWire temp_int(TEMP_INT_PIN); //internal temperature sensor
@@ -29,7 +30,7 @@ String time_delimiter = ":";
 String value_delimiter = ",";
 
 File LogFile;
-
+char c;
 void init_io()
 {
   pinMode(CHIP_SELECT_PIN, OUTPUT);   
@@ -90,7 +91,8 @@ float readValidTemp(OneWire temp_sensor)
   {
     temperature = getTemp(temp_sensor);  
   }
-  while(temperature == -1000 || (int)temperature == 85);
+  while(temperature == -1000 || (int)temperature == 85 ||
+  temperature < MIN_TEMP || temperature > MAX_TEMP);
   return temperature;
 }  
 
@@ -124,6 +126,29 @@ void setup () {
 }
 
 void loop () {
+
+  if (Serial2.available())
+  {
+    c = Serial2.read();
+  }
+  
+  if (c == 's')
+  {//sending all the data to PC
+    // re-open the file for reading:
+    LogFile = SD.open("LogFile.txt", FILE_READ);  
+    if (LogFile)
+    {
+      while(LogFile.available())
+      {//send thro Bluetooth
+        Serial2.write(LogFile.read());        
+      }
+    }   
+    else
+    {
+      Serial2.println("Can't open file");
+    }
+  }
+  
     DateTime now = RTC.now();
     
     textline = now.year() + date_delimiter + now.month() + date_delimiter + now.day() + value_delimiter
@@ -179,5 +204,5 @@ void loop () {
     }
     
     delay(5000);
-    
+    c = '\0';
 }

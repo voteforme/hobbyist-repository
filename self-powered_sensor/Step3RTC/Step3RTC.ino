@@ -17,6 +17,10 @@
 #define MIN_TEMP -10
 #define MAX_TEMP 100
 
+#define SAMPLING_PERIOD 5000 //in mili-seconds
+#define LOG_TO_FILE_PERIOD 12 // in units of SAMPLING_PERIOD, i.e. 12 x 5000ms = 60 seconds. 
+//because log to file doesn't need such a high sampling rate.
+
 RTC_DS1307 RTC;
 OneWire temp_int(TEMP_INT_PIN); //internal temperature sensor
 OneWire temp_ext(TEMP_EXT_PIN); //internal temperature sensor
@@ -29,6 +33,7 @@ String date_delimiter = "/";
 String time_delimiter = ":";
 String value_delimiter = ",";
 
+int log_to_file_counter = 0;
 File LogFile;
 char c;
 void init_io()
@@ -89,10 +94,10 @@ float readValidTemp(OneWire temp_sensor)
   float temperature;
   do
   {
-    temperature = getTemp(temp_sensor);  
+    temperature = getTemp(temp_sensor); 
+    delay(200);    
   }
-  while(temperature == -1000 || (int)temperature == 85 ||
-  temperature < MIN_TEMP || temperature > MAX_TEMP);
+  while(temperature < MIN_TEMP || temperature > MAX_TEMP);
   return temperature;
 }  
 
@@ -180,29 +185,43 @@ void loop () {
              + now.hour() + time_delimiter + now.minute() + time_delimiter + now.second() + value_delimiter;                             
     Serial.print(textline);    
     Serial.println();  
-
-    LogFile = SD.open("LogFile.txt", FILE_WRITE);  
-    if (LogFile)
-    {
-      
-      LogFile.print(textline);
-      LogFile.print(temp_int_value);
-      LogFile.print(value_delimiter);
-      LogFile.print(temp_ext_value);
-      LogFile.println();
-      
-      LogFile.close();
-      #ifdef SERIAL_DEBUG 
-      Serial.println("Write done.");     
-      #endif
-    }  
-    else
-    {
-      #ifdef SERIAL_DEBUG      
-      Serial.println("error can't write file");
-      #endif
-    }
     
-    delay(5000);
+    
+    if (log_to_file_counter >= LOG_TO_FILE_PERIOD)
+    {
+      //reset the counter
+      log_to_file_counter = 0;
+      //send thro Bluetooth
+      Serial2.print("Write to file"); 
+      LogFile = SD.open("LogFile.txt", FILE_WRITE);  
+      delay(100);
+      if (LogFile)
+      {
+        
+        LogFile.print(textline);
+        LogFile.print(temp_int_value);
+        LogFile.print(value_delimiter);
+        LogFile.print(temp_ext_value);
+        LogFile.println();
+        
+        LogFile.close();
+        #ifdef SERIAL_DEBUG 
+        Serial.println("Write done.");     
+        #endif
+      }  
+      else
+      {
+        #ifdef SERIAL_DEBUG      
+        Serial.println("error can't write file");
+        #endif
+      }
+   }
+    
+    delay(SAMPLING_PERIOD);
     c = '\0';
+    /*
+    Serial2.print("log_to_file_counter = ");
+    Serial2.println(log_to_file_counter);
+    */
+    log_to_file_counter++;
 }

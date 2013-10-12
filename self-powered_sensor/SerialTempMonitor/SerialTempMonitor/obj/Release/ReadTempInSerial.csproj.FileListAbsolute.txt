@@ -1,0 +1,8 @@
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\bin\Release\ReadTempInSerial.exe
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\bin\Release\ReadTempInSerial.pdb
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ResolveAssemblyReference.cache
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ReadTempInSerial.Form1.resources
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ReadTempInSerial.Properties.Resources.resources
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ReadTempInSerial.csproj.GenerateResource.Cache
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ReadTempInSerial.exe
+C:\Users\King\Documents\Csharp_programs\ReadTempInSerial\ReadTempInSerial\obj\Release\ReadTempInSerial.pdb

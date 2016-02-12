@@ -1,0 +1,1 @@
+This svn repository hosts all the source code for hobbyist.co.nz
